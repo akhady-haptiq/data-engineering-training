@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:15
+    container_name: dbt_postgres
+    environment:
+      POSTGRES_USER: dbt_user
+      POSTGRES_PASSWORD: dbt_pass
+      POSTGRES_DB: dbt_demo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  dbt:
+    build: .
+    container_name: dbt_container
+    volumes:
+      - .:/usr/app
+    depends_on:
+      - db
+    working_dir: /usr/app
+    stdin_open: true
+    tty: true
+    environment:
+      DBT_PROFILES_DIR: /usr/app
+
+volumes:
+  postgres_data:
