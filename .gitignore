@@ -1,3 +1,6 @@
 list
 .idea
 training-env
+target/
+dbt_packages/
+logs/
