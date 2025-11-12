@@ -6,8 +6,8 @@ aggregated AS (
     SELECT
         year,
         month,
-        SUM(CASE WHEN category = 'Asset' THEN debit ELSE 0 END) AS total_assets,
-        SUM(CASE WHEN category = 'Liability' THEN credit ELSE 0 END) AS total_liabilities,
+        SUM(CASE WHEN category = 'Assets' THEN debit ELSE 0 END) AS total_assets,
+        SUM(CASE WHEN category = 'Liabilities' THEN credit ELSE 0 END) AS total_liabilities,
         SUM(CASE WHEN category = 'Equity' THEN credit ELSE 0 END) AS total_equity
     FROM tb
     GROUP BY year, month

@@ -19,13 +19,38 @@ models:
         description: "Name of the account."
       - name: account_type
         description: "Type of the account (e.g., Asset, Liability, Expense)."
+      - name: gl_number
+        description: "General ledger account number."
+        tests:
+          - not_null
+      - name: gl_name
+        description: "Name of the account."
+        tests:
+          - not_null
+      - name: category
+        description: "Account category (Assets, Liabilities, Equity, Revenue, Expense)."
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Assets', 'Liabilities', 'Equity', 'Revenue', 'Expense']
       - name: year
         description: "Year of the trial balance entry."
+        tests:
+          - not_null
       - name: month
         description: "Month of the trial balance entry."
+        tests:
+          - not_null
       - name: debit
         description: "Debit amount for the account."
       - name: credit
         description: "Credit amount for the account."
       - name: period_amount
         description: "Calculated period amount as debit minus credit."
+
+  - name: income_statement
+    description: "Income statement showing revenue, expenses, and net income by period."
+    tests:
+      - sequential_months:
+          year_column: year
+          month_column: month

@@ -35,5 +35,5 @@ SELECT
     net_income,
     ytd_net_income
 FROM income
-WHERE net_income > 0  -- Filter to show only profitable months
+-- WHERE net_income > 0  -- Commented out to ensure sequential months for testing
 ORDER BY year, month
