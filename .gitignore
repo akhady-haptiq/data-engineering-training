@@ -1,6 +1,11 @@
 list
+.DS_Store
 .idea
+.vscode
 training-env
 target/
 dbt_packages/
 logs/
+flows/__pycache__/
+prefect_data/
+.prefect/
