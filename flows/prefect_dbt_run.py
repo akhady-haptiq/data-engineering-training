@@ -56,8 +56,7 @@ def run_dbt_seeds(model: str | None = None, full_refresh: bool = False):
     
     logger.info(f"DBT Seed Command: {seed_command}")
     
-    dbt_task = DbtCoreOperation(commands=[seed_command],
-                                   project_dir=PROJECT_DIR, profiles_dir=DBT_PROFILES_DIR, log_print=True)
+    dbt_task = DbtCoreOperation(commands=[seed_command], project_dir=PROJECT_DIR, profiles_dir=DBT_PROFILES_DIR)
 
     result = dbt_task.run()
     return result
@@ -79,6 +78,30 @@ def run_dbt_models(model_selection: str):
     result = dbt_task.run()
     return result
 
+# Exercise Task Stub: Implement dbt tests
+@task
+def run_dbt_tests(model_selection: str | None = None):
+    logger = get_run_logger()
+    logger.info("(Exercise) dbt test task invoked with selection: %s", model_selection)
+
+    if model_selection and model_selection != "*":
+        command = f"dbt test --select {model_selection}"
+    else:
+        command = "dbt test"
+    
+    logger.info(f"DBT Test Command: {command}")
+    
+    dbt_task = DbtCoreOperation(commands=[command], project_dir=PROJECT_DIR, profiles_dir=DBT_PROFILES_DIR)
+    result = dbt_task.run()
+    return result
+
+@flow(name="prefect_dbt_testflow_run", log_prints=True)
+def prefect_dbt_testflow_run(model_selection):
+    logger = get_run_logger()
+    logger.info("Starting DBT tests run flow...")
+    
+    run_dbt_tests(model_selection)
+
 @flow(name="prefect_dbt_subflow_run", log_prints=True)
 def prefect_dbt_subflow_run(model_selection):
     logger = get_run_logger()
@@ -96,7 +119,10 @@ def prefect_dbt_flow_run(full_refresh: bool = True, seed_name: str | None = None
         run_dbt_seeds(seed_selection)
 
     #run_dbt_models(model_selection)
-    prefect_dbt_subflow_run(model_selection) 
+    prefect_dbt_subflow_run(model_selection)
+
+    # Exercise Task Stub: Implement dbt tests
+    prefect_dbt_testflow_run(model_selection)
 
 if __name__ == "__main__":
     prefect_dbt_flow_run()
